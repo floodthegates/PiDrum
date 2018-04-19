@@ -5,6 +5,8 @@
 #ifndef PIDRUM_GRAPHICS_H
 #define PIDRUM_GRAPHICS_H
 
+#include <string>
+
 #include <stdlib.h>
 #ifdef _WIN32
 #include <windows.h>
@@ -17,6 +19,8 @@
 #else
 #include <GL/glut.h>
 #endif
+
+using namespace std;
 
 // Program initialization NOT OpenGL/GLUT dependent,
 // as we haven't created a GLUT window yet
@@ -35,6 +39,7 @@ void displayNewKit();
 void displayOpenKit();
 void displayDeleteKit();
 void displaySounds();
+void displayPlay();
 
 // Trap and process alphanumeric keyboard events
 void kbd(unsigned char key, int x, int y);
@@ -50,6 +55,8 @@ void timer(int extra);
 
 // Handle mouse button pressed and released events
 void mouse(int button, int state, int x, int y);
+
+string form_play_string(int si);
 
 int graphicsPlay(int argc, char *argv[]);
 

@@ -35,10 +35,10 @@ public:
     Button();
     Button(position p, bsize s, color c, string t);
 
-    position get_position();
-    bsize get_size();
-    color get_color();
-    string get_text();
+    position get_position() const;
+    bsize get_size() const;
+    color get_color() const;
+    string get_text() const;
 
     void set_position(position newP);
     void set_size(bsize newS);
@@ -46,6 +46,7 @@ public:
     void set_text(string newT);
 
     void draw() const;
+    bool overlap(int x, int y) const;
 };
 
 #endif //PIDRUM_SCREENS_H

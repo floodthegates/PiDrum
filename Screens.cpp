@@ -27,16 +27,16 @@ Button::Button(position p, bsize s, color c, string t) {
 }
 
 // Button getters
-position Button::get_position() {
+position Button::get_position() const {
     return pos;
 }
-bsize Button::get_size() {
+bsize Button::get_size() const {
     return siz;
 }
-color Button::get_color() {
+color Button::get_color() const {
     return col;
 }
-string Button::get_text() {
+string Button::get_text() const {
     return text;
 }
 
@@ -64,10 +64,13 @@ void Button::draw() const {
     glBegin(GL_QUADS);
     // top left corner
     glVertex2i(pos.x, pos.y);
+    glColor3f(col.r - .25, col.g - .25, col.b - .25);
     // bottom left corner
     glVertex2i(pos.x, pos.y + siz.height);
+    glColor3f(col.r - .5, col.g - .5, col.b - .5);
     // bottom right corner
     glVertex2i(pos.x + siz.width, pos.y + siz.height);
+    glColor3f(col.r - .25, col.g - .25, col.b - .25);
     // top right corner
     glVertex2i(pos.x + siz.width, pos.y);
     glEnd();
@@ -75,6 +78,11 @@ void Button::draw() const {
     glColor3f(1 - col.r, 1 - col.g, 1 - col.b);
     glRasterPos2i(pos.x + siz.width * .5 - text.length() * 5, pos.y + siz.height * .6);
     for (int i = 0; i < text.length(); ++i) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text[i]);
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
     }
+}
+
+bool Button::overlap(int x, int y) const {
+    return (x >= pos.x && x <= (pos.x + siz.width) &&
+            y >= pos.y && y <= (pos.y + siz.height));
 }
