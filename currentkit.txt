@@ -1,0 +1,5 @@
+Sounds/WoodenPiccolo.ogg
+Sounds/TamaWood.ogg
+Sounds/SonorForce3000.ogg
+Sounds/PiccoloSidestick.ogg
+Sounds/AcousticSnare.ogg
