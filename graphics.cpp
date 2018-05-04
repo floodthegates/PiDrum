@@ -20,6 +20,7 @@ bool pad2init = false;
 bool pad3init = false;
 bool pad4init = false;
 bool padError = false;
+bool pyStarted = false;
 color white = {1.0, 1.0, 1.0};
 color black = {0.0, 0.0, 0.0};
 color red   = {1.0, 0.5, 0.5};
@@ -149,7 +150,10 @@ void display() {
             displaySounds();
             break;
         case play:
-            displayPlay();
+            if (!pyStarted) {
+                displayPlay();
+            }
+            pyStarted = true;
             break;
     }
 
