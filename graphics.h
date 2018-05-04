@@ -5,6 +5,7 @@
 #ifndef PIDRUM_GRAPHICS_H
 #define PIDRUM_GRAPHICS_H
 
+#include "dirent.h"
 #include <string>
 
 #include <stdlib.h>
@@ -36,10 +37,15 @@ void display(void);
 
 void displayMainMenu();
 void displayNewKit();
+void displayPadInit();
+void displaySaveNew();
 void displayOpenKit();
 void displayDeleteKit();
 void displaySounds();
 void displayPlay();
+
+void set_pad_init(int i, bool p);
+void init_pad_init();
 
 // Trap and process alphanumeric keyboard events
 void kbd(unsigned char key, int x, int y);

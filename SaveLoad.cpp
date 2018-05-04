@@ -11,10 +11,27 @@ using namespace std;
 // SaveLoad constructors
 SaveLoad::SaveLoad() {
     saveInd = 10;
+    pad0 = "";
+    pad1 = "";
+    pad2 = "";
+    pad3 = "";
+    pad4 = "";
 }
-SaveLoad::SaveLoad(int si, vector<int> ss) {
+SaveLoad::SaveLoad(int si) {
     saveInd = si;
-    sounds = ss;
+    pad0 = "";
+    pad1 = "";
+    pad2 = "";
+    pad3 = "";
+    pad4 = "";
+}
+SaveLoad::SaveLoad(int si, string p0, string p1, string p2, string p3, string p4) {
+    saveInd = si;
+    pad0 = p0;
+    pad1 = p1;
+    pad2 = p2;
+    pad3 = p3;
+    pad4 = p4;
 }
 
 // SaveLoad getters
@@ -27,6 +44,23 @@ bool SaveLoad::get_empty() {
 string SaveLoad::get_save_name() {
     return saveName;
 }
+string SaveLoad::get_sound(int ind) {
+    switch (ind) {
+        case 0:
+            return pad0;
+        case 1:
+            return pad1;
+        case 2:
+            return pad2;
+        case 3:
+            return pad3;
+        case 4:
+            return pad4;
+    }
+    return "error";
+}
+
+/*
 vector<SaveLoad> SaveLoad::vectSaves(){
 
     //Creates vector
@@ -64,6 +98,7 @@ vector<SaveLoad> SaveLoad::vectSaves(){
 
 
 }
+*/
 
 // SaveLoad setters
 void SaveLoad::set_save_ind(int newSI) {
@@ -75,42 +110,127 @@ void SaveLoad::set_empty(bool newE) {
 void SaveLoad::set_save_name(string newN) {
     saveName = newN;
 }
-
-void SaveLoad::save() {
-    ofstream f_out1("pidrumsaves.txt");
-    if (f_out1) {
-        f_out1 << "Pi Drum Saves" << endl;
+void SaveLoad::set_sound(int ind, string s) {
+    switch (ind) {
+        case 0:
+            pad0 = s;
+        case 1:
+            pad1 = s;
+        case 2:
+            pad2 = s;
+        case 3:
+            pad3 = s;
+        case 4:
+            pad4 = s;
     }
-    f_out1.close();
 }
 
-void SaveLoad::load() {
-    // start streaming the file
-    ifstream piDrumFile("pidrumsaves.txt");
-    //initialize variables
-    string info;
+void SaveLoad::save() {
+
+    vector<SaveLoad> b;
+
+    //Opens in-file
+    ifstream saveFile("pidrumsaves.txt");
+
+    //Initialize variables
+    int si;
+    string p0, p1, p2, p3, p4;
     string junk;
 
-    // clear junk at top of list
-    getline(piDrumFile, info);
+    //loops through each line of the file and inserts the Player object into a vector
+    while (saveFile && saveFile.peek()!= EOF) {
+        saveFile >> si >> p0 >> p1 >> p2 >> p3 >> p4;
 
-    while (piDrumFile) {
-        // get values from file
-        getline(piDrumFile, junk, ';');
+        //Inserts the current variable values into a vector
+        b.push_back(SaveLoad(si, p0, p1, p2, p3, p4));
+        getline(saveFile, junk);
     }
-    cout << "Save " << saveInd << " has been loaded" << endl;
+    //closes file
+    saveFile.close();
+
+    //change vector to include new save information
+    for (int i = 0; i < b.size(); i++) {
+        if (saveInd == b[i].get_save_ind()) {
+            b[i].set_sound(0, pad0);
+            b[i].set_sound(1, pad1);
+            b[i].set_sound(2, pad2);
+            b[i].set_sound(3, pad3);
+            b[i].set_sound(4, pad4);
+        }
+    }
+
+    ofstream f_out1("pidrumsaves.txt");
+    for(int i = 0; i < 10; i++){
+        f_out1 << i << " " << b[i].pad0 << " " << b[i].pad1 << " " << b[i].pad2
+               << " " << b[i].pad3 << " " << b[i].pad4 << endl;
+    }
+    f_out1.close();
+    cout << saveInd << " has been saved" << endl;
+}
+
+SaveLoad SaveLoad::load(int ind) {
+    // start streaming the file
+    ifstream piDrumFile("pidrumsaves.txt");
+
+    //Initialize variables
+    int si;
+    string p0, p1, p2, p3, p4;
+    SaveLoad a(ind);
+
+    //loops through each line of the file and inserts the Player object into a vector
+    while (piDrumFile && piDrumFile.peek()!= EOF) {
+        piDrumFile >> si >> p0 >> p1 >> p2 >> p3 >> p4;
+        if (si == ind) {
+            a.set_sound(0, p0);
+            a.set_sound(1, p1);
+            a.set_sound(2, p2);
+            a.set_sound(3, p3);
+            a.set_sound(4, p4);
+        }
+    }
+    cout << "Save " << a.saveInd << " has been loaded" << endl;
+    return a;
 }
 
 void SaveLoad::delete_save(int si) {
 
 }
 
+void SaveLoad::save_current_kit(int ind) {
+    ofstream f_out1("currentkit.txt");
+    if (f_out1) {
+        f_out1 << "Sounds/" << get_sound(0) << ".ogg" << endl
+               << "Sounds/" << get_sound(1) << ".ogg" << endl
+               << "Sounds/" << get_sound(2) << ".ogg" << endl
+               << "Sounds/" << get_sound(3) << ".ogg" << endl
+               << "Sounds/" << get_sound(4) << ".ogg";
+    }
+    f_out1.close();
+}
+
 void SaveLoad::initialize_save() {
     ofstream f_out1("pidrumsaves.txt");
     if (f_out1) {
         for (int i=0; i<10; ++i) {
-            f_out1 << i << " 0 0 0 0 0" << endl;
+            f_out1 << i << " pad0 pad1 pad2 pad3 pad4" << endl;
         }
     }
     f_out1.close();
+
+    ofstream f_out2("currentkit.txt");
+    if (f_out2) {
+        for (int i=0; i<5; ++i) {
+            f_out2 << "pad" << i << endl;
+        }
+    }
+    f_out2.close();
+}
+
+void SaveLoad::refresh() {
+    saveInd = 10;
+    pad0 = "";
+    pad1 = "";
+    pad2 = "";
+    pad3 = "";
+    pad4 = "";
 }
