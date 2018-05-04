@@ -152,6 +152,7 @@ void display() {
         case play:
             if (!pyStarted) {
                 displayPlay();
+                system("python HelloWorld.py");
             }
             pyStarted = true;
             break;

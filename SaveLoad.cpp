@@ -220,10 +220,15 @@ void SaveLoad::initialize_save() {
     ofstream f_out2("currentkit.txt");
     if (f_out2) {
         for (int i=0; i<5; ++i) {
-            f_out2 << "pad" << i << endl;
+            f_out2 << "pad" << i;
+            if (i != 4) {
+                f_out2 << endl;
+            }
         }
     }
     f_out2.close();
+
+    cout << "Saves initialized" << endl;
 }
 
 void SaveLoad::refresh() {
